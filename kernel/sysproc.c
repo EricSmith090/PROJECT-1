@@ -133,3 +133,13 @@ sys_procinfo(void)
 
   return 0;
 }
+
+// Lưu tracemask vào process hiện tại để theo dõi syscall nào được gọi
+uint64
+sys_trace(void)
+{
+  int mask;
+  argint(0, &mask);           // Lấy tham số mask (register a0) từ user
+  myproc()->tracemask = mask; // Lưu mask vào struct proc của process hiện tại
+  return 0;
+}

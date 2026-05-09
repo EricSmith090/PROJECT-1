@@ -102,6 +102,7 @@ extern uint64 sys_link(void);
 extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
 extern uint64 sys_procinfo(void);
+extern uint64 sys_trace(void);  // Khai báo hàm sys_trace
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -128,6 +129,16 @@ static uint64 (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_procinfo] sys_procinfo,
+[SYS_trace]    sys_trace, // Ánh xạ số hiệu 23 tới hàm sys_trace
+};
+
+// Mảng tên các syscall để in ra khi trace
+static char *syscall_names[] = {
+  "", "fork", "exit", "wait", "pipe", "read",
+  "kill", "exec", "fstat", "chdir", "dup",
+  "getpid", "sbrk", "sleep", "uptime", "open",
+  "write", "mknod", "unlink", "link", "mkdir",
+  "close", "procinfo", "trace",
 };
 
 void
@@ -141,6 +152,11 @@ syscall(void)
     // Use num to lookup the system call function for num, call it,
     // and store its return value in p->trapframe->a0
     p->trapframe->a0 = syscalls[num]();
+    // Nếu bit tương ứng trong tracemask của process đang được set, in ra thông tin syscall
+    if((p->tracemask >> num) & 1) {
+      printf("%d: syscall %s -> %ld\n",
+             p->pid, syscall_names[num], p->trapframe->a0);
+    }
   } else {
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);
