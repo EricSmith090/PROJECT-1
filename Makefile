@@ -195,6 +195,7 @@ UPROGS=\
 	$U/_wc\
 	$U/_tree\
 	$U/_xargs\
+	$U/_proctest\
 	$U/_zombie
 
 
