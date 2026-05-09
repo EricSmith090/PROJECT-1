@@ -194,6 +194,7 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_tree\
+	$U/_xargs\
 	$U/_zombie
 
 
