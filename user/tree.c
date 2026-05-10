@@ -41,7 +41,7 @@ void tree(char *path, int depth) {
 
     // Doc cac entry trong thu muc
     struct dirent de;
-    char buf[512];
+    char buf[128];
     while (read(fd, &de,  sizeof(de)) == sizeof(de)) {
         if (de.inum == 0) continue;
         if (strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0) continue;
